@@ -45,8 +45,8 @@ button,button[type=button],button[type=reset],button[type=submit]{-webkit-appear
     		return this.charAt(0).toUpperCase() + this.slice(1);
 	}
 	let hostname = window.location.hostname;
-	let domain = hostname.match(/^(?:.*?\.)?(\w{3,}\.(?:\w{2,8}|\w{2,4}\.\w{2,4}))$/)[1];
-	document.title = domain.capitalize();
+	let domain = hostname.match(/^(?:.*?\.)?(\w{3,}\.(?:\w{2,8}|\w{2,4}\.\w{2,4}))$/)[1].capitalize();
+	document.title = domain;
 	let brand = domain.replace(".", "<span class=\"fancy\">.</span>");
 </script>
 </head>
