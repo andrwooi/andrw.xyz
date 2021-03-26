@@ -41,8 +41,9 @@ button,button[type=button],button[type=reset],button[type=submit]{-webkit-appear
   
 </script>
 <script>
-let hostname = window.location.hostname;
-let domain = hostname.match(/^(?:.*?\.)?(\w{3,}\.(?:\w{2,8}|\w{2,4}\.\w{2,4}))$/)[1];
+	let hostname = window.location.hostname;
+	let domain = hostname.match(/^(?:.*?\.)?(\w{3,}\.(?:\w{2,8}|\w{2,4}\.\w{2,4}))$/)[1];
+	let brand = domain.replace(/./, "<span class=\"fancy\">.</span>");
 </script>
 </head>
 
@@ -72,11 +73,8 @@ let domain = hostname.match(/^(?:.*?\.)?(\w{3,}\.(?:\w{2,8}|\w{2,4}\.\w{2,4}))$/
 <main>
 	<div class="splash-container">
 	<div class="splash">
-	<!--h1>Andrw<span class="fancy">.</span>xyz</h1-->
 	<h1>
-	<script>
-	document.write(domain);
-	</script>
+	<script>document.write(brand);</script>
 	</h1>
 	<span class="handle">@andrwooi</span>
 	<h2>
