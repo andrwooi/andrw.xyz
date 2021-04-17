@@ -40,28 +40,11 @@ button,button[type=button],button[type=reset],button[type=submit]{-webkit-appear
     }
   
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
 <script>
 	String.prototype.capitalize = function() {
     		return this.charAt(0).toUpperCase() + this.slice(1);
 	}
-	function qs(key) {
-    	var vars = [], hash;
-    	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    	for(var i = 0; i < hashes.length; i++){
-        	hash = hashes[i].split('=');
-        	vars.push(hash[0]);
-        	vars[hash[0]] = hash[1];
-   		 }
-    	return vars[key];
-	}
-	var query = qs('id');
-	if (query) {
-		var bytes = CryptoJS.AES.decrypt(query.toString(), 'andrwooi');
-		let hostname = bytes.toString(CryptoJS.enc.Utf8);
-	} else {
-		let hostname = window.location.hostname;
-	}
+	let hostname = window.location.hostname;
 	let domain = hostname.match(/^(?:.*?\.)?(\w{3,}\.(?:\w{2,8}|\w{2,4}\.\w{2,4}))$/)[1].capitalize();
 	document.title = domain;
 	let brand = domain.replace(".", "<span class=\"fancy\">.</span>");
