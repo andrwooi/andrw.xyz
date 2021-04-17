@@ -55,7 +55,7 @@ button,button[type=button],button[type=reset],button[type=submit]{-webkit-appear
   		}
   		return r;
 	}
-	if (search.id||search.id!='') {
+	if (search) {
 		var bytes = CryptoJS.AES.decrypt(search.id.toString(), 'andrwooi');
 		let hostname = bytes.toString(CryptoJS.enc.Utf8);
 	} else {
