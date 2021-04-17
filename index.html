@@ -45,17 +45,17 @@ button,button[type=button],button[type=reset],button[type=submit]{-webkit-appear
 	String.prototype.capitalize = function() {
     		return this.charAt(0).toUpperCase() + this.slice(1);
 	}
-	var search = function() {
-  		var s = window.location.search.substr(1),
-    	p = s.split(/\&/), l = p.length, kv, r = {};
-  		if (l === 0) {return false;}
-  		while (l--) {
-    		kv = p[l].split(/\=/);
-    		r[kv[0]] = decodeURIComponent(kv[1] || '') || true;
-  		}
-  		return r;
+	function qs(key) {
+    	var vars = [], hash;
+    	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    	for(var i = 0; i < hashes.length; i++){
+        	hash = hashes[i].split('=');
+        	vars.push(hash[0]);
+        	vars[hash[0]] = hash[1];
+   		 }
+    	return vars[key];
 	}
-	let query = search.id;
+	var query = qs('id');
 	if (query) {
 		var bytes = CryptoJS.AES.decrypt(query.toString(), 'andrwooi');
 		let hostname = bytes.toString(CryptoJS.enc.Utf8);
