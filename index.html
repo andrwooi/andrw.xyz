@@ -46,17 +46,22 @@ button,button[type=button],button[type=reset],button[type=submit]{-webkit-appear
 	}
 	let hostname = window.location.hostname;
 	let domain = hostname.match(/^(?:.*?\.)?(\w{3,}\.(?:\w{2,8}|\w{2,4}\.\w{2,4}))$/)[1].capitalize();
-	var brand = domain;
-	if (brand == null) {
-		brand = "Andrw";
-	} else if (brand == "Eth.link") {
-		brand = "Andrw.eth";
-	} else if (brand == "Hns.to") {
-		brand = ".Andrw";
+	if (typeof domain !== 'undefined' && domain) {
+		if (domain == "Eth.link") {
+			domain = "Andrw.eth";
+		} else if (domain == "Dweb.link") {
+			domain = "Andrw.eth";
+		} else if (domain == "Pinata.cloud") {
+			domain = "Andrw.";
+		} else if (domain == "Hns.to") {
+			domain = ".Andrw";
+		} else {
+			document.title = domain;
+		}
 	} else {
-		document.title = domain;
+		domain = "Andrw";
 	}
-	brand = brand.replace(".", "<span class=\"fancy\">.</span>");
+	let brand = domain.replace(".", "<span class=\"fancy\">.</span>");
 </script>
 </head>
 
