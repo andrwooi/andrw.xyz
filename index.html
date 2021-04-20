@@ -45,19 +45,18 @@ button,button[type=button],button[type=reset],button[type=submit]{-webkit-appear
     		return this.charAt(0).toUpperCase() + this.slice(1);
 	}
 	let hostname = window.location.hostname;
-	
 	let domain = hostname.match(/^(?:.*?\.)?(\w{3,}\.(?:\w{2,8}|\w{2,4}\.\w{2,4}))$/)[1].capitalize();
-	
-	let brand = domain.replace(".", "<span class=\"fancy\">.</span>");
+	var brand = domain;
 	if (brand == null) {
 		brand = "Andrw";
 	} else if (brand == "Eth.link") {
 		brand = "Andrw.eth";
 	} else if (brand == "Hns.to") {
-		brand = "<span class=\"fancy\">.</span>Andrw";
+		brand = ".Andrw";
 	} else {
 		document.title = domain;
 	}
+	brand = brand.replace(".", "<span class=\"fancy\">.</span>");
 </script>
 </head>
 
