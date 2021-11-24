@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<!-- saved from url=(0018)https://andrw.xyz/ -->
-<html lang="en-us"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="en-us">
+<head>
 <title>Andrw</title>
 
-
+<meta charset="UTF-8">
 <meta name="language" content="en">
 <meta name="description" content="">
 <meta name="keywords" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="">
-<meta name="twitter:description" content="">
-<meta name="twitter:site" content="https://twitter.com/andrwooi">
-<meta name="twitter:creator" content="https://twitter.com/andrwooi">
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="" />
+<meta name="twitter:description" content=""/>
+<meta name="twitter:site" content="https://twitter.com/andrwooi" />
+<meta name="twitter:creator" content="https://twitter.com/andrwooi" />
 
-<link rel="shortcut icon" type="image/png" href="https://themes.gohugo.io//theme/hugo-theme-codex/favicon.ico">
+<link rel="shortcut icon" type="image/png" href="https://themes.gohugo.io//theme/hugo-theme-codex/favicon.ico" />
 
 <style>
 
@@ -40,106 +40,33 @@ button,button[type=button],button[type=reset],button[type=submit]{-webkit-appear
     }
   
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
 <script>
 	String.prototype.capitalize = function() {
     		return this.charAt(0).toUpperCase() + this.slice(1);
 	}
-	let hostname = window.location.hostname;
-	let domain = hostname.match(/^(?:.*?\.)?(\w{3,}\.(?:\w{2,8}|\w{2,4}\.\w{2,4}))$/)[1].capitalize();
-	if (typeof domain !== 'undefined' && domain) {
-		if (domain == "Eth.link") {
-			domain = "Andrw.eth";
-		} else if (domain == "Dweb.link") {
-			domain = "Andrw.eth";
-        } else if (domain == "Ipfs.dweb.link") {
-			domain = "Andrw.eth";
-		} else if (domain == "Pinata.cloud") {
-			domain = "Andrw.";
-		} else if (domain == "Hns.to") {
-			domain = ".Andrw";
-		} else {
-			document.title = domain;
-		}
-	} else {
-		domain = "Andrw";
+	function qs(key) {
+    	var vars = [], hash;
+    	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    	for(var i = 0; i < hashes.length; i++){
+        	hash = hashes[i].split('=');
+        	vars.push(hash[0]);
+        	vars[hash[0]] = hash[1];
+   		 }
+    	return vars[key];
 	}
+	var query = qs('id');
+	if (query) {
+		var bytes = CryptoJS.AES.decrypt(query.toString(), 'andrwooi');
+		let hostname = bytes.toString(CryptoJS.enc.Utf8);
+	} else {
+		let hostname = window.location.hostname;
+	}
+	let domain = hostname.match(/^(?:.*?\.)?(\w{3,}\.(?:\w{2,8}|\w{2,4}\.\w{2,4}))$/)[1].capitalize();
+	document.title = domain;
 	let brand = domain.replace(".", "<span class=\"fancy\">.</span>");
 </script>
-<script type="text/javascript">// Promises 
-var _eid_promises = {}; 
-// Turn the incoming message from extension 
-// into pending Promise resolving 
-window.addEventListener("message", function(event) { 
-    if(event.source !== window) return; 
-    if(event.data.src && (event.data.src === "background.js")) { 
-        console.log("Page received: "); 
-        console.log(event.data); 
-        // Get the promise 
-        if(event.data.nonce) { 
-            var p = _eid_promises[event.data.nonce]; 
-            // resolve 
-            if(event.data.result === "ok") { 
-                if(event.data.signature !== undefined) { 
-                    p.resolve({hex: event.data.signature}); 
-                } else if(event.data.version !== undefined) { 
-                    p.resolve(event.data.extension + "/" + event.data.version); 
-                } else if(event.data.cert !== undefined) { 
-                    p.resolve({hex: event.data.cert}); 
-                } else { 
-                    console.log("No idea how to handle message"); 
-                    console.log(event.data); 
-                } 
-            } else { 
-                // reject 
-                p.reject(new Error(event.data.result)); 
-            } 
-            delete _eid_promises[event.data.nonce]; 
-        } else { 
-            console.log("No nonce in event msg"); 
-        } 
-    } 
-}, false); 
- 
- 
-function TokenSigning() { 
-    function nonce() { 
-        var val = ""; 
-        var hex = "abcdefghijklmnopqrstuvwxyz0123456789"; 
-        for(var i = 0; i < 16; i++) val += hex.charAt(Math.floor(Math.random() * hex.length)); 
-        return val; 
-    } 
- 
-    function messagePromise(msg) { 
-        return new Promise(function(resolve, reject) { 
-            // amend with necessary metadata 
-            msg["nonce"] = nonce(); 
-            msg["src"] = "page.js"; 
-            // send message 
-            window.postMessage(msg, "*"); 
-            // and store promise callbacks 
-            _eid_promises[msg.nonce] = { 
-                resolve: resolve, 
-                reject: reject 
-            }; 
-        }); 
-    } 
-    this.getCertificate = function(options) { 
-        var msg = {type: "CERT", lang: options.lang, filter: options.filter}; 
-        console.log("getCertificate()"); 
-        return messagePromise(msg); 
-    }; 
-    this.sign = function(cert, hash, options) { 
-        var msg = {type: "SIGN", cert: cert.hex, hash: hash.hex, hashtype: hash.type, lang: options.lang, info: options.info}; 
-        console.log("sign()"); 
-        return messagePromise(msg); 
-    }; 
-    this.getVersion = function() { 
-        console.log("getVersion()"); 
-        return messagePromise({ 
-            type: "VERSION" 
-        }); 
-    }; 
-}</script></head>
+</head>
 
 <body>
 <div class="burger__container">
@@ -153,9 +80,9 @@ function TokenSigning() {
 <nav class="nav" id="navigation">
 <ul class="nav__list">
 	<li>
-		My real world endeavour<br>
-        <a href="https://www.inspidea.com/" target="_blank"><b>Inspidea</b></a><br>
-        <a href="https://www.bowleh.com/" target="_blank"><b>Bowleh</b></a><br>
+		My real world endeavour<br />
+        <a href="https://www.inspidea.com" target="_blank"><b>Inspidea</b></a><br />
+        <a href="https://www.bowleh.com" target="_blank"><b>Bowleh</b></a><br />
 	</li>
 	<li>
         Send files to my <a href="https://www.dropbox.com/request/DKM4LCmzzAjAlVmAhI4N" target="_blank"><b>Dropbox</b></a>
@@ -172,33 +99,34 @@ function TokenSigning() {
 	<h1>
 	<script>document.write(brand);</script>
 	</h1>
-	
+	<span class="handle">@andrwooi</span>
 	<h2>
 	Links to my digital footprints.
 	</h2>
-	<span class="handle">@andrwooi</span>
 	
 	<div class="social-icons">
-		<a class="social-icons__link" rel="me" title="Twitter" href="https://twitter.com/andrwooi" target="_blank">
-		<div class="social-icons__icon" style="background-image: url(&#39;https://themes.gohugo.io/theme/hugo-theme-codex/svg/twitter.svg&#39;)"></div>
+		<a class="social-icons__link" rel="me" title="Twitter" href="https://twitter.com/andrwooi"
+target="_blank" rel="noopener">
+		<div class="social-icons__icon" style="background-image: url('twitter.svg')"></div>
 		</a>
 		
-		<a class="social-icons__link" rel="me" title="LinkedIn" href="https://my.linkedin.com/in/andrwooi" target="_blank">
-		<div class="social-icons__icon" style="background-image: url(&#39;https://themes.gohugo.io/theme/hugo-theme-codex/svg/linkedin.svg&#39;)"></div>
+		<a class="social-icons__link" rel="me" title="LinkedIn" href="https://my.linkedin.com/in/andrwooi"
+target="_blank" rel="noopener">
+		<div class="social-icons__icon" style="background-image: url('linkedin.svg')"></div>
 		</a>
  
-		<a class="social-icons__link" rel="me" title="Instagram" href="https://instagram.com/andrwooi" target="_blank">
-		<div class="social-icons__icon" style="background-image: url(&#39;https://themes.gohugo.io/theme/hugo-theme-codex/svg/instagram.svg&#39;)"></div>
+		<a class="social-icons__link" rel="me" title="Instagram" href="https://instagram.com/andrwooi" target="_blank" rel="noopener">
+		<div class="social-icons__icon" style="background-image: url('instagram.svg')"></div>
 		</a>
 		 
-		<a class="social-icons__link" rel="me" title="Facebook" href="https://facebook.com/andrwooi" target="_blank">
-		<div class="social-icons__icon" style="background-image: url(&#39;https://themes.gohugo.io/theme/hugo-theme-codex/svg/facebook.svg&#39;)"></div>
+		<a class="social-icons__link" rel="me" title="Facebook" href="https://facebook.com/andrwooi" target="_blank" rel="noopener">
+		<div class="social-icons__icon" style="background-image: url('facebook.svg')"></div>
 		</a>
 
-        		<a class="social-icons__link" rel="me" title="IMDB" href="https://imdb.me/andrwooi" target="_blank">
-		<div class="social-icons__icon" style="background-image: url(&#39;data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGhlaWdodD0iNTEycHgiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEycHgiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxnIGlkPSJjb21wX3g1Rl8xNzEtaW1kYiI+PGc+PGc+PHJlY3QgaGVpZ2h0PSIxMzEuMjIyIiB3aWR0aD0iMzMuODg0IiB4PSI5Mi40ODUiIHk9IjE4OS41MjkiLz48cGF0aCBkPSJNMTkwLjY0NiwyNTEuMDMyYy0yLjc3My0yMC41MzYtNS41NDQtNDEuMTc0LTguOTMzLTYxLjUwM2gtNDMuOTQ3djEzMS4yMjJoMjkuNzc2di04Ni43NjNsMTIuNTI4LDg2Ljc2M2gyMS4xNSAgICAgbDExLjkxMi04OC43MTR2ODguNzE0aDI5LjQ2OVYxODkuNTI5aC00NC4xNTJMMTkwLjY0NiwyNTEuMDMyeiIvPjxwYXRoIGQ9Ik0zMjkuODc3LDIxMC45ODdjLTQuNDE0LTIzLjEwMi0zMi4yNC0yMS40NTgtNTAuMzExLTIxLjQ1OGgtMjUuMjYxdjEzMS4yMjJjODguNDA3LDAuMTA0LDc3LjAwOSw2LjE2LDc3LjAwOS04NC43MDkgICAgIEMzMzEuMzE0LDIyNy43MjQsMzMxLjYyNCwyMTguNzkyLDMyOS44NzcsMjEwLjk4N3ogTTI4OC4yOTMsMjk3Ljk1NXYtODUuOTRjMTIuMjE5LDAsMTAuNTc2LDYuNDcsMTAuNTc2LDE2LjQyOHY1MC42MjIgICAgIEMyOTguODY5LDI4OS4wMjMsMzAwLjgxOSwyOTguMjY1LDI4OC4yOTMsMjk3Ljk1NXoiLz48cGF0aCBkPSJNMzk2LjcyLDIyMi44OThjLTkuMTM3LDAtMTUuMjk4LDIuNzczLTIxLjQ1Nyw5LjQ0N3YtNDIuODE2aC0zMi41NXYxMzEuMjIyaDMwLjU5N2wxLjk1My04LjMxNyAgICAgYzUuODUyLDYuOTgyLDEyLjIxOCwxMC4wNjMsMjEuNDU3LDEwLjA2M2MyMC4zMzEsMCwyMi43OTUtMTUuNjA3LDIyLjc5NS0zMS43Mjl2LTM2Ljk2NCAgICAgQzQxOS41MTUsMjM2LjA0Miw0MTguNjkzLDIyMi44OTgsMzk2LjcyLDIyMi44OTh6IE0zODAuMjkzLDMwMy42MDRjLTEuNjQyLDAtMy4wODEtMC44MjMtMy45MDItMi40NjUgICAgIGMtMi4yNi01LjIzNy0xLjEyOC00NS4yODItMS4xMjgtNDUuODk3YzAtMy45MDItMS4xMzItMTMuMDQxLDUuMDMtMTMuMDQxYzcuNDk2LDAsNi4zNjQsNy40OTcsNi4zNjQsMTMuMDQxdjMzLjU3NCAgICAgQzM4Ni42NTcsMjk0LjM2MiwzODguMzAxLDMwMy42MDQsMzgwLjI5MywzMDMuNjA0eiIvPjwvZz48cGF0aCBkPSIgICAgTTQyOS45MDIsNDU2SDgyLjA5OEM1My44NzcsNDU2LDMxLDQzMy4xMjMsMzEsNDA0LjkwMlYxMDcuMDk4QzMxLDc4Ljg3Nyw1My44NzcsNTYsODIuMDk4LDU2aDM0Ny44MDUgICAgQzQ1OC4xMjMsNTYsNDgxLDc4Ljg3Nyw0ODEsMTA3LjA5OHYyOTcuODA1QzQ4MSw0MzMuMTIzLDQ1OC4xMjMsNDU2LDQyOS45MDIsNDU2eiIgc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MjA7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjEwOyIvPjwvZz48L2c+PGcgaWQ9IkxheWVyXzEiLz48L3N2Zz4=&#39;)"></div>
+        		<a class="social-icons__link" rel="me" title="IMDB" href="https://imdb.me/andrwooi" target="_blank" rel="noopener">
+		<div class="social-icons__icon" style="background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGhlaWdodD0iNTEycHgiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEycHgiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxnIGlkPSJjb21wX3g1Rl8xNzEtaW1kYiI+PGc+PGc+PHJlY3QgaGVpZ2h0PSIxMzEuMjIyIiB3aWR0aD0iMzMuODg0IiB4PSI5Mi40ODUiIHk9IjE4OS41MjkiLz48cGF0aCBkPSJNMTkwLjY0NiwyNTEuMDMyYy0yLjc3My0yMC41MzYtNS41NDQtNDEuMTc0LTguOTMzLTYxLjUwM2gtNDMuOTQ3djEzMS4yMjJoMjkuNzc2di04Ni43NjNsMTIuNTI4LDg2Ljc2M2gyMS4xNSAgICAgbDExLjkxMi04OC43MTR2ODguNzE0aDI5LjQ2OVYxODkuNTI5aC00NC4xNTJMMTkwLjY0NiwyNTEuMDMyeiIvPjxwYXRoIGQ9Ik0zMjkuODc3LDIxMC45ODdjLTQuNDE0LTIzLjEwMi0zMi4yNC0yMS40NTgtNTAuMzExLTIxLjQ1OGgtMjUuMjYxdjEzMS4yMjJjODguNDA3LDAuMTA0LDc3LjAwOSw2LjE2LDc3LjAwOS04NC43MDkgICAgIEMzMzEuMzE0LDIyNy43MjQsMzMxLjYyNCwyMTguNzkyLDMyOS44NzcsMjEwLjk4N3ogTTI4OC4yOTMsMjk3Ljk1NXYtODUuOTRjMTIuMjE5LDAsMTAuNTc2LDYuNDcsMTAuNTc2LDE2LjQyOHY1MC42MjIgICAgIEMyOTguODY5LDI4OS4wMjMsMzAwLjgxOSwyOTguMjY1LDI4OC4yOTMsMjk3Ljk1NXoiLz48cGF0aCBkPSJNMzk2LjcyLDIyMi44OThjLTkuMTM3LDAtMTUuMjk4LDIuNzczLTIxLjQ1Nyw5LjQ0N3YtNDIuODE2aC0zMi41NXYxMzEuMjIyaDMwLjU5N2wxLjk1My04LjMxNyAgICAgYzUuODUyLDYuOTgyLDEyLjIxOCwxMC4wNjMsMjEuNDU3LDEwLjA2M2MyMC4zMzEsMCwyMi43OTUtMTUuNjA3LDIyLjc5NS0zMS43Mjl2LTM2Ljk2NCAgICAgQzQxOS41MTUsMjM2LjA0Miw0MTguNjkzLDIyMi44OTgsMzk2LjcyLDIyMi44OTh6IE0zODAuMjkzLDMwMy42MDRjLTEuNjQyLDAtMy4wODEtMC44MjMtMy45MDItMi40NjUgICAgIGMtMi4yNi01LjIzNy0xLjEyOC00NS4yODItMS4xMjgtNDUuODk3YzAtMy45MDItMS4xMzItMTMuMDQxLDUuMDMtMTMuMDQxYzcuNDk2LDAsNi4zNjQsNy40OTcsNi4zNjQsMTMuMDQxdjMzLjU3NCAgICAgQzM4Ni42NTcsMjk0LjM2MiwzODguMzAxLDMwMy42MDQsMzgwLjI5MywzMDMuNjA0eiIvPjwvZz48cGF0aCBkPSIgICAgTTQyOS45MDIsNDU2SDgyLjA5OEM1My44NzcsNDU2LDMxLDQzMy4xMjMsMzEsNDA0LjkwMlYxMDcuMDk4QzMxLDc4Ljg3Nyw1My44NzcsNTYsODIuMDk4LDU2aDM0Ny44MDUgICAgQzQ1OC4xMjMsNTYsNDgxLDc4Ljg3Nyw0ODEsMTA3LjA5OHYyOTcuODA1QzQ4MSw0MzMuMTIzLDQ1OC4xMjMsNDU2LDQyOS45MDIsNDU2eiIgc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6IzAwMDAwMDtzdHJva2Utd2lkdGg6MjA7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjEwOyIvPjwvZz48L2c+PGcgaWQ9IkxheWVyXzEiLz48L3N2Zz4=')"></div>
 		</a>
-		
+		</a>
 	</div>
 	</div>
 	</div>
@@ -207,8 +135,7 @@ function TokenSigning() {
 <script>
 function toggleMobileNavState(){const a=document.querySelector("body");a.classList.toggle("nav--active")}function initBurger(){const a=document.querySelector(".burger");a.addEventListener("click",toggleMobileNavState)}initBurger()
 </script>
+</body>
+</html>
 
 
-
-
-</body></html>
